@@ -1,0 +1,15 @@
+<?php 
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function mcf_tweaks_form_page_node_form_alter(&$form, &$form_state) {
+  global $_domain;
+  if (isset($_domain['domain_id'])) { // only display domain's primary links
+    $menus[domain_conf_variable_get($_domain['domain_id'], 'menu_main_links_source')] = $_domain['sitename'].' Main menu';
+  //  $menus[domain_conf_variable_get($_domain['domain_id'], 'menu_footer_menu_links_source')] = $_domain['sitename'].' Footer menu';
+  }
+  if (isset($menus)) {
+    $options = menu_parent_options($menus, $form['#node']->type);
+    $form['menu']['link']['parent']['#options'] = $options;
+  }
+}
